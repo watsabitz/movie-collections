@@ -1,9 +1,9 @@
 import Navigation from "../components/Navigation";
 import MoviePoster from "../components/MoviePoster";
 import type { Movie } from "../types/movie";
-import type { FC } from "react";
+import type { FC, PropsWithChildren } from "react";
 
-const starWarsMovies: Movie[] = [
+const starWarsMovies: ReadonlyArray<Movie> = [
   {
     title: "Star Wars: Episode IV - A New Hope",
     year: 1977,
@@ -27,7 +27,7 @@ const starWarsMovies: Movie[] = [
   },
 ];
 
-const StarWarsPage: FC = () => {
+const StarWarsPage: FC<Record<never, never>> = () => {
   return (
     <div className="min-h-screen bg-gray-100">
       <Navigation />
@@ -36,9 +36,9 @@ const StarWarsPage: FC = () => {
           Star Wars Movies
         </h1>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {starWarsMovies.map((movie, index) => (
+          {starWarsMovies.map((movie: Movie) => (
             <article
-              key={index}
+              key={`${movie.title}-${movie.year}`}
               className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
             >
               <MoviePoster title={movie.title} imageUrl={movie.poster} />
