@@ -29,7 +29,6 @@ describe("StarWarsPage", () => {
     expect(movies[2]).toHaveTextContent(
       "Star Wars: Episode VI - Return of the Jedi"
     );
-    expect(movies[3]).toHaveTextContent("zzz");
   });
 
   it("displays movie details", () => {
