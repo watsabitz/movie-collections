@@ -1,0 +1,11 @@
+# These owners will be the default owners for everything in
+# the repo. They will be requested for review when someone 
+# opens a pull request.
+*       @watsabitz
+
+# Specific ownership for React components
+/src/components/    @watsabitz
+/src/pages/         @watsabitz
+
+# Test files ownership
+/src/__tests__/     @watsabitz

@@ -1,6 +1,6 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import StarWarsPage from './pages/StarWarsPage'
-import StarTrekPage from './pages/StarTrekPage'
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import StarWarsPage from "./pages/StarWarsPage";
+import StarTrekPage from "./pages/StarTrekPage";
 
 function App() {
   return (
@@ -10,7 +10,7 @@ function App() {
         <Route path="/star-trek" element={<StarTrekPage />} />
       </Routes>
     </Router>
-  )
+  );
 }
 
-export default App
+export default App;
