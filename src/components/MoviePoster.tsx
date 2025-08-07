@@ -1,4 +1,4 @@
-import type { FC } from 'react';
+import type { FC } from "react";
 
 interface MoviePosterProps {
   title: string;
@@ -13,8 +13,8 @@ const MoviePoster: FC<MoviePosterProps> = ({ title, imageUrl }) => {
         alt={`${title} poster`}
         className="w-full h-full object-cover"
         onError={(e) => {
-          e.currentTarget.style.display = 'none';
-          e.currentTarget.parentElement?.classList.add('fallback');
+          e.currentTarget.style.display = "none";
+          e.currentTarget.parentElement?.classList.add("fallback");
         }}
       />
       <div className="hidden fallback:flex absolute inset-0 items-center justify-center">
