@@ -12,3 +12,73 @@
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
 }
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: linear-gradient(180deg, #fdf4ff, #fce7f3);
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #d946ef, #ec4899);
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(180deg, #c026d3, #db2777);
+}
+
+/* Smooth animations for all elements */
+* {
+  transition: all 0.2s ease-in-out;
+}
+
+/* Enhanced focus styles for accessibility */
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid #d946ef;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Custom selection colors */
+::selection {
+  background-color: #fce7f3;
+  color: #be185d;
+}
+
+/* Subtle animations for page transitions */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in {
+  animation: fadeIn 0.6s ease-out;
+}
+
+/* Heart pulse animation for likes */
+@keyframes heartPulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.heart-pulse {
+  animation: heartPulse 0.6s ease-in-out;
+}

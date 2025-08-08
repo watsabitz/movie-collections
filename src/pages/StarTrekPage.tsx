@@ -1,15 +1,10 @@
-import Navigation from "../components/Navigation";
-import MoviePoster from "../components/MoviePoster";
+import type { FC } from "react";
+import { useState, useCallback } from "react";
+import Navigation from "@components/Navigation";
+import MoviePoster from "@components/MoviePoster";
+import type { Movie } from "@app-types/movie";
 
-interface TrekMovie {
-  title: string;
-  year: number;
-  description: string;
-  poster: string;
-  posterSources?: string[];
-}
-
-const starTrekMovies: ReadonlyArray<TrekMovie> = [
+const starTrekMovies: ReadonlyArray<Movie> = [
   {
     title: "Star Trek: The Motion Picture",
     year: 1979,
@@ -48,29 +43,50 @@ const starTrekMovies: ReadonlyArray<TrekMovie> = [
   },
 ];
 
-const StarTrekPage = () => {
+const StarTrekPage: FC<Record<never, never>> = () => {
+  // State to track likes for each movie
+  const [movieLikes, setMovieLikes] = useState<Record<string, number>>({});
+
+  // Handle like updates for individual movies
+  const handleLikeUpdate = useCallback((movieTitle: string, likes: number) => {
+    setMovieLikes((prev) => ({
+      ...prev,
+      [movieTitle]: likes,
+    }));
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-100">
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-fuchsia-50 to-pink-50">
       <Navigation />
       <div className="container mx-auto px-4 py-8">
-        <h1 className="text-4xl font-bold mb-8 text-center">
+        <h1 className="text-5xl font-bold mb-12 text-center bg-gradient-to-r from-purple-600 to-fuchsia-600 bg-clip-text text-transparent">
           Star Trek Movies
         </h1>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {starTrekMovies.map((movie) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {starTrekMovies.map((movie: Movie) => (
             <article
               key={`${movie.title}-${movie.year}`}
-              className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
+              className="bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl overflow-hidden flex flex-col hover:shadow-2xl transition-all duration-300 hover:scale-[1.02] border border-purple-100"
             >
               <MoviePoster
                 title={movie.title}
                 poster={movie.poster}
                 posterSources={movie.posterSources}
+                showLikeButton={true}
+                onLike={handleLikeUpdate}
+                initialLikes={movieLikes[movie.title] || 0}
+                likesPerClick={5}
               />
               <div className="p-6 flex-1">
-                <h2 className="text-2xl font-bold mb-2">{movie.title}</h2>
-                <p className="text-gray-600 mb-4">Released: {movie.year}</p>
-                <p className="text-gray-700">{movie.description}</p>
+                <h2 className="text-2xl font-bold mb-2 text-gray-800">
+                  {movie.title}
+                </h2>
+                <p className="text-purple-600 mb-4 font-medium">
+                  Released: {movie.year}
+                </p>
+                <p className="text-gray-700 leading-relaxed">
+                  {movie.description}
+                </p>
               </div>
             </article>
           ))}
