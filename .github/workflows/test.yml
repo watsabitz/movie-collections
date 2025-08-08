@@ -7,6 +7,14 @@ on:
     branches: [main]
 
 jobs:
+  auto-approve:
+    runs-on: ubuntu-latest
+    if: github.actor == 'watsabitz'
+    steps:
+      - uses: hmarr/auto-approve-action@v3
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+
   react-components:
     runs-on: ubuntu-latest
 
