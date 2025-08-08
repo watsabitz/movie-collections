@@ -5,13 +5,19 @@ on:
     branches: [main]
   pull_request_target:
     branches: [main]
+    paths-ignore:
+      - '**.md'
+  pull_request:
+    branches: [main]
+    paths-ignore:
+      - '**.md'
 
 jobs:
   auto-approve:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: github.actor == 'watsabitz'
+    if: github.event_name == 'pull_request_target' && github.actor == 'watsabitz'
     steps:
       - uses: hmarr/auto-approve-action@v3
         with:
@@ -22,9 +28,13 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
