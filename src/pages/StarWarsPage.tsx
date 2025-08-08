@@ -1,7 +1,7 @@
-import Navigation from "../components/Navigation";
-import MoviePoster from "../components/MoviePoster";
-import type { Movie } from "../types/movie";
-import type { FC, PropsWithChildren } from "react";
+import type { FC } from "react";
+import Navigation from "@components/Navigation";
+import MoviePoster from "@components/MoviePoster";
+import type { Movie } from "@app-types/movie";
 
 const starWarsMovies: ReadonlyArray<Movie> = [
   {

@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import { render, screen, within } from "@testing-library/react";
 import { BrowserRouter } from "react-router-dom";
-import StarWarsPage from "../pages/StarWarsPage";
+import StarWarsPage from "@pages/StarWarsPage";
 
 describe("StarWarsPage", () => {
   const renderPage = () => {
