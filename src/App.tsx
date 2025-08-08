@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import StarWarsPage from "./pages/StarWarsPage";
-import StarTrekPage from "./pages/StarTrekPage";
+import StarWarsPage from "@pages/StarWarsPage";
+import StarTrekPage from "@pages/StarTrekPage";
 
 function App() {
   return (
