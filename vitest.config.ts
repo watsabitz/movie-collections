@@ -11,11 +11,11 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src',
-      '@components': '/src/components',
-      '@pages': '/src/pages',
-      '@app-types': '/src/types',
-      '@tests': '/src/__tests__'
-    }
-  }
+      "@": "/src",
+      "@components": "/src/components",
+      "@pages": "/src/pages",
+      "@app-types": "/src/types",
+      "@tests": "/src/__tests__",
+    },
+  },
 });
