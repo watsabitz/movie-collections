@@ -9,21 +9,36 @@ const starWarsMovies: ReadonlyArray<Movie> = [
     year: 1977,
     description:
       "Luke Skywalker joins forces with a Jedi Knight, a cocky pilot, a Wookiee and two droids to save the galaxy from the Empire's world-destroying battle station.",
-    poster: "https://image.tmdb.org/t/p/w500/6FfCtAuVAW8XJjZ7eWeLibRLWTw.jpg",
+    poster: "https://picsum.photos/seed/starwars-episode4/400/600",
+    posterSources: [
+      "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop&auto=format",
+      "https://via.placeholder.com/400x600/1a202c/ffffff?text=Star+Wars+IV",
+      "https://picsum.photos/seed/starwars-episode4/400/600",
+    ],
   },
   {
     title: "Star Wars: Episode V - The Empire Strikes Back",
     year: 1980,
     description:
       "After the Rebels are brutally overpowered by the Empire on the ice planet Hoth, Luke Skywalker begins Jedi training with Yoda.",
-    poster: "https://image.tmdb.org/t/p/w500/7BuH8itoSrLExs2YZSsM01Qk2no.jpg",
+    poster: "https://picsum.photos/seed/starwars-episode5/400/600",
+    posterSources: [
+      "https://images.unsplash.com/photo-1520637836862-4d197d17c93a?w=400&h=600&fit=crop&auto=format",
+      "https://via.placeholder.com/400x600/2d3748/ffffff?text=Star+Wars+V",
+      "https://picsum.photos/seed/starwars-episode5/400/600",
+    ],
   },
   {
     title: "Star Wars: Episode VI - Return of the Jedi",
     year: 1983,
     description:
       "After rescuing Han Solo from Jabba the Hutt, the Rebels attempt to destroy the second Death Star.",
-    poster: "https://image.tmdb.org/t/p/w500/xxCnFmRZ83jHTZsBiceG6UqQ9gX.jpg",
+    poster: "https://picsum.photos/seed/starwars-episode6/400/600",
+    posterSources: [
+      "https://images.unsplash.com/photo-1518709268805-4e9042af2176?w=400&h=600&fit=crop&auto=format",
+      "https://via.placeholder.com/400x600/4a5568/ffffff?text=Star+Wars+VI",
+      "https://picsum.photos/seed/starwars-episode6/400/600",
+    ],
   },
 ];
 
@@ -41,7 +56,11 @@ const StarWarsPage: FC<Record<never, never>> = () => {
               key={`${movie.title}-${movie.year}`}
               className="bg-white rounded-lg shadow-md overflow-hidden flex flex-col"
             >
-              <MoviePoster title={movie.title} imageUrl={movie.poster} />
+              <MoviePoster
+                title={movie.title}
+                poster={movie.poster}
+                posterSources={movie.posterSources}
+              />
               <div className="p-6 flex-1">
                 <h2 className="text-2xl font-bold mb-2">{movie.title}</h2>
                 <p className="text-gray-600 mb-4">Released: {movie.year}</p>

@@ -1,8 +1,3 @@
-/** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-};
+// ESM bridge to CommonJS tailwind config to satisfy type: module packaging
+import cjsConfig from "./tailwind.config.cjs";
+export default cjsConfig;

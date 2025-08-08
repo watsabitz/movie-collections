@@ -10,4 +10,6 @@ export interface Movie {
   readonly description: string;
   /** URL to the movie's poster image */
   readonly poster: string;
+  /** Optional alternative poster sources to try in order */
+  readonly posterSources?: readonly string[];
 }
