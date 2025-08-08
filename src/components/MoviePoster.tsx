@@ -1,4 +1,5 @@
 import type { FC, ImgHTMLAttributes } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 export interface MoviePosterProps {
   /** Movie title for accessibility */
@@ -13,6 +14,8 @@ export interface MoviePosterProps {
   className?: string;
   /** Additional img props except src/alt */
   imgProps?: Omit<ImgHTMLAttributes<HTMLImageElement>, "src" | "alt">;
+  /** Maximum number of retry attempts (default: 2) */
+  maxRetries?: number;
 }
 
 const FALLBACK_SVG =
@@ -28,47 +31,100 @@ const MoviePoster: FC<MoviePosterProps> = ({
   posterSources,
   className = "",
   imgProps,
+  maxRetries = 2,
 }) => {
-  // Build ordered list of candidate sources: explicit posterSources, then poster/imageUrl, then fallback
-  const candidates: string[] = [
-    ...(posterSources ?? []),
-    ...(poster ? [poster] : []),
-    ...(imageUrl ? [imageUrl] : []),
-  ].filter(Boolean);
-  if (!candidates.length) candidates.push(FALLBACK_SVG);
+  // Memoize candidates array to prevent unnecessary recalculations
+  const candidates = useMemo((): readonly string[] => {
+    const sources: string[] = [
+      ...(posterSources ?? []),
+      ...(poster ? [poster] : []),
+      ...(imageUrl ? [imageUrl] : []),
+    ].filter(Boolean);
 
-  // We'll mutate index via closure in onError
-  let currentIndex = 0;
-  const initialSrc = candidates[0];
+    // Always ensure we have at least the fallback
+    return sources.length > 0 ? sources : [FALLBACK_SVG];
+  }, [posterSources, poster, imageUrl]);
+
+  // Track current source index and retry attempts
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [retryCount, setRetryCount] = useState(0);
+  const [hasFailed, setHasFailed] = useState(false);
+
+  // Handle image load errors with proper state management
+  const handleImageError = useCallback(
+    (e: React.SyntheticEvent<HTMLImageElement>) => {
+      const imgElement = e.currentTarget;
+
+      // Try retry on same source first
+      if (retryCount < maxRetries) {
+        setRetryCount((prev) => prev + 1);
+        // Force reload by adding timestamp
+        const currentSrc = candidates[currentIndex];
+        if (currentSrc && currentSrc !== FALLBACK_SVG) {
+          const separator = currentSrc.includes("?") ? "&" : "?";
+          imgElement.src = `${currentSrc}${separator}retry=${retryCount + 1}`;
+          return;
+        }
+      }
+
+      // Reset retry count and try next candidate
+      setRetryCount(0);
+      if (currentIndex < candidates.length - 1) {
+        setCurrentIndex((prev) => prev + 1);
+        return;
+      }
+
+      // All candidates exhausted - show fallback UI
+      setHasFailed(true);
+      imgElement.style.display = "none";
+    },
+    [candidates, currentIndex, retryCount, maxRetries]
+  );
+
+  // Reset state when candidates change
+  const resetState = useCallback(() => {
+    setCurrentIndex(0);
+    setRetryCount(0);
+    setHasFailed(false);
+  }, []);
+
+  // Reset when props change
+  useMemo(() => {
+    resetState();
+  }, [resetState]);
+
+  const currentSrc = candidates[currentIndex] || FALLBACK_SVG;
+  const fallbackClasses = hasFailed ? "fallback-active" : "";
+
   return (
     <figure
-      className={`w-full h-[400px] bg-gray-200 relative ${className}`}
+      className={`w-full h-[400px] bg-gray-200 relative ${className} ${fallbackClasses}`}
       aria-label={`${title} poster`}
     >
       <img
-        src={initialSrc}
+        src={currentSrc}
         alt={`${title} poster`}
-        className="w-full h-full object-cover"
+        className="w-full h-full object-cover transition-opacity duration-200"
         loading="lazy"
-        onError={(e) => {
-          // Try next candidate if available
-          if (currentIndex < candidates.length - 1) {
-            currentIndex += 1;
-            e.currentTarget.src = candidates[currentIndex];
-            return;
-          }
-          // Exhausted candidates – show fallback
-          if (e.currentTarget.src !== FALLBACK_SVG) {
-            e.currentTarget.src = FALLBACK_SVG;
-          }
-          e.currentTarget.style.display = "none";
-          e.currentTarget.parentElement?.classList.add("fallback-active");
+        onError={handleImageError}
+        style={{
+          display: hasFailed ? "none" : "block",
         }}
         {...imgProps}
       />
-      <div className="pointer-events-none opacity-0 transition-opacity duration-200 absolute inset-0 flex flex-col items-center justify-center text-gray-500 fallback-active:opacity-100">
-        <span className="material-icons text-4xl mb-2">movie</span>
-        <p>{title}</p>
+      <div
+        className={`
+          pointer-events-none absolute inset-0 flex flex-col items-center justify-center 
+          text-gray-500 transition-opacity duration-200
+          ${hasFailed ? "opacity-100" : "opacity-0"}
+        `}
+        aria-hidden={!hasFailed}
+      >
+        <span className="material-icons text-4xl mb-2" aria-hidden="true">
+          movie
+        </span>
+        <p className="text-center px-4">{title}</p>
+        <p className="text-xs text-gray-400 mt-1">Poster unavailable</p>
       </div>
     </figure>
   );
